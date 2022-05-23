@@ -1,0 +1,63 @@
+What is the most common media type used by artists 
+
+SELECT a.name, 
+       m.name, 
+       Count (m.mediatypeid) AS "count" 
+FROM   artist a 
+       JOIN album al 
+         ON al.artistid = a.artistid 
+       JOIN track t 
+         ON t.albumid = al.albumid 
+       JOIN mediatype m 
+         ON m.mediatypeid = t.mediatypeid 
+GROUP  BY a.name 
+ORDER  BY "count" DESC 
+LIMIT  10; 
+
+Who is the artist that sold copies?
+
+SELECT a.name, 
+       Count(i.total) AS "sold" 
+FROM   artist a 
+       JOIN album al 
+         ON al.artistid = a.artistid 
+       JOIN track t 
+         ON al.albumid = t.albumid 
+       JOIN invoiceline il 
+         ON t.trackid = il.trackid 
+       JOIN invoice i 
+         ON i.invoiceid = il.invoiceid 
+GROUP  BY a.name 
+ORDER  BY sold DESC 
+LIMIT  10; 
+
+What is the playlist that contain tracks?
+
+SELECT p.NAME, 
+       Count(t.trackid) "tracks" 
+FROM   playlist p 
+       JOIN playlisttrack pt 
+         ON pt.playlistid = p.playlistid 
+       JOIN track t 
+         ON t.trackid = pt.trackid 
+GROUP  BY p.NAME 
+ORDER  BY tracks DESC 
+
+what is the longest track?
+
+SELECT t.composer, 
+       Count(album.albumid) AS "Albums" 
+FROM   track t 
+       JOIN album 
+         ON t.albumid = album.albumid 
+GROUP  BY t.composer 
+ORDER  BY albums DESC
+
+SELECT album.title, 
+       t.milliseconds AS "Milliseconds" 
+FROM   album 
+       JOIN track t 
+         ON t.albumid = album.albumid 
+GROUP  BY album.title 
+ORDER  BY t.milliseconds DESC 
+LIMIT  5;  
